@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "nodemon index.js",
-    "build": "webpack --mode production"
+    "build": "webpack --mode production --config webpack.config.mjs"
   },
   "keywords": [],
   "author": "",
