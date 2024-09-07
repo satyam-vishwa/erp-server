@@ -1,18 +1,24 @@
 import path from 'path';
-import nodeExternals from 'webpack-node-externals';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export default {
-  target: 'node',
-  entry: './index.js', // Corrected path to entry point
+  entry: './index.js',
   output: {
-    path: path.resolve('dist'),
-    filename: 'index.cjs',
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'bundle.js',
+    libraryTarget: 'module', // Use ES modules for output
+    chunkFormat: 'module'    // Explicitly set chunk format to 'module'
   },
-  externals: [nodeExternals()], // Excludes node_modules from the bundle
+  experiments: {
+    outputModule: true,       // Enable output as ES module
+  },
   module: {
     rules: [
       {
-        test: /\.js$/, // Transpile JavaScript files
+        test: /\.m?js$/,      // Support .js and .mjs files
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
@@ -24,7 +30,11 @@ export default {
     ],
   },
   resolve: {
-    extensions: ['.js'],
+    extensions: ['.js', '.mjs'], // Support import without file extension
+  },
+  target: 'node14',             // Explicitly set the target environment to Node.js
+  externals: {
+    // Exclude node_modules from the bundle
+    node_modules: path.resolve(__dirname, 'node_modules'),
   },
 };
-
