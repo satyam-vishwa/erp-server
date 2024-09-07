@@ -1,7 +1,7 @@
-const path = require('path');
-const nodeExternals = require('webpack-node-externals');
+import path from 'path';
+import nodeExternals from 'webpack-node-externals';
 
-module.exports = {
+export default {
   // Set the entry point for your application
   entry: './index.js',
   
