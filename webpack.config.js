@@ -1,38 +1,44 @@
-import path from 'path';
-import { fileURLToPath } from 'url';
+const path = require('path');
+const nodeExternals = require('webpack-node-externals');
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-export default {
+module.exports = {
+  // Set the entry point for your application
   entry: './index.js',
+  
+  // Define the output configuration
   output: {
-    path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
-    libraryTarget: 'commonjs2',  // Change to CommonJS
+    path: path.resolve(__dirname, 'dist'),
+    libraryTarget: 'commonjs2'
   },
-  target: 'node14',  // Keep the target as Node.js
+  
+  // Set the mode to 'production'
+  mode: 'production',
+  
+  // Add configuration for resolving modules
+  resolve: {
+    extensions: ['.js', '.json']
+  },
+  
+  // Define the rules for loading files
   module: {
     rules: [
       {
-        test: /\.m?js$/,
+        test: /\.js$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env'],
-          },
-        },
-      },
-    ],
+            presets: ['@babel/preset-env']
+          }
+        }
+      }
+    ]
   },
-  resolve: {
-    extensions: ['.js', '.mjs'],
-  },
-  externals: {
-    // Exclude node_modules from the bundle
-    node_modules: path.resolve(__dirname, 'node_modules'),
-  },
-};
-
+  
+  // Exclude node_modules from the bundle
+  externals: [nodeExternals()],
+  
+  // Add source map support for easier debugging
+  devtool: 'source-map'
 };
