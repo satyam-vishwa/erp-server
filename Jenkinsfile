@@ -1,6 +1,6 @@
 pipeline {
     agent any
-    tools{
+    tools {
         nodejs 'nodejs'
     }
     stages {
@@ -21,12 +21,18 @@ pipeline {
         }
         stage('zip Artifacts') {
             steps {
-                sh 'zip -r build.zip dist/'
+                script {
+                    def currentDateTime = sh(returnStdout: true, script: 'date +%Y%m%d-%H%M%S').trim()
+                    sh "zip -r build_${currentDateTime}.zip dist/"
+                }
             }
         }
         stage('upload to s3') {
             steps {
-                sh 'aws s3 cp $GIT_COMMIT.zip s3://erp-server-node.js/'
+                script {
+                    def currentDateTime = sh(returnStdout: true, script: 'date +%Y%m%d-%H%M%S').trim()
+                    sh "aws s3 cp build_${currentDateTime}.zip s3://erp-server-node.js/"
+                }
             }
         }
     }
