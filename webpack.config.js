@@ -9,16 +9,13 @@ export default {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
-    libraryTarget: 'module', // Use ES modules for output
-    chunkFormat: 'module'    // Explicitly set chunk format to 'module'
+    libraryTarget: 'commonjs2',  // Change to CommonJS
   },
-  experiments: {
-    outputModule: true,       // Enable output as ES module
-  },
+  target: 'node14',  // Keep the target as Node.js
   module: {
     rules: [
       {
-        test: /\.m?js$/,      // Support .js and .mjs files
+        test: /\.m?js$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
@@ -30,11 +27,12 @@ export default {
     ],
   },
   resolve: {
-    extensions: ['.js', '.mjs'], // Support import without file extension
+    extensions: ['.js', '.mjs'],
   },
-  target: 'node14',             // Explicitly set the target environment to Node.js
   externals: {
     // Exclude node_modules from the bundle
     node_modules: path.resolve(__dirname, 'node_modules'),
   },
+};
+
 };
