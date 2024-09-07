@@ -21,7 +21,7 @@ pipeline {
         }
         stage('zip Artifacts') {
             steps {
-                sh 'zip -r $GIT_COMMIT.zip /dist'
+                sh 'zip -r build.zip /dist'
             }
         }
         stage('upload to s3') {
