@@ -3,6 +3,10 @@ pipeline {
     tools {
         nodejs 'nodejs'
     }
+    environment {
+        // Get the current date and time when the pipeline starts
+        CURRENT_DATETIME = sh(returnStdout: true, script: 'date +%Y%m%d-%H%M%S').trim()
+    }
     stages {
         stage('print versions') {
             steps {
@@ -21,18 +25,12 @@ pipeline {
         }
         stage('zip Artifacts') {
             steps {
-                script {
-                    def currentDateTime = sh(returnStdout: true, script: 'date +%Y%m%d-%H%M%S').trim()
-                    sh "zip -r build_${currentDateTime}.zip dist/"
-                }
+                sh "zip -r build_${env.CURRENT_DATETIME}.zip dist/"
             }
         }
         stage('upload to s3') {
             steps {
-                script {
-                    def currentDateTime = sh(returnStdout: true, script: 'date +%Y%m%d-%H%M%S').trim()
-                    sh "aws s3 cp build_${currentDateTime}.zip s3://erp-server-node.js/"
-                }
+                sh "aws s3 cp build_${env.CURRENT_DATETIME}.zip s3://erp-server-node.js/"
             }
         }
     }
