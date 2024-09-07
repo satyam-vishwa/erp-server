@@ -1,5 +1,10 @@
 import path from 'path';
 import nodeExternals from 'webpack-node-externals';
+import { fileURLToPath } from 'url';
+
+// Get the directory name from the URL
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export default {
   // Set the entry point for your application
